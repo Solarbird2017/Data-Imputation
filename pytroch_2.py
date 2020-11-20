@@ -53,18 +53,6 @@ class Net(nn.Module):
 
         return X
 
-
-# # load IRIS dataset
-# dataset = pd.read_csv('dataset/iris.csv')
-#
-# # transform species to numerics
-# dataset.loc[dataset.species == 'Iris-setosa', 'species'] = 0
-# dataset.loc[dataset.species == 'Iris-versicolor', 'species'] = 1
-# dataset.loc[dataset.species == 'Iris-virginica', 'species'] = 2
-#
-# train_X, test_X, train_y, test_y = train_test_split(dataset[dataset.columns[0:4]].values,
-#                                                     dataset.species.values, test_size=0.8)
-
 # wrap up with Variable in pytorch
 train_X = Variable(torch.Tensor(train_X).float())
 test_X = Variable(torch.Tensor(test_X).float())
