@@ -4,4 +4,4 @@ Handling the missing data problems.
 2. Imputation accuracy is verified with different Machine Learning classifiers and Neural Networks.
 3. Scikit-learn and Pytorch packages need to be installed before running the Python code.
 
-We use the algorithm to handling the missing data problem in electronic health records (EHRs). Due to the privacy, we cannot release the original EHR dataset.
+We use the algorithm to handle the missing data problems in electronic health records (EHRs). Due to the privacy, we cannot release the original EHR dataset.
