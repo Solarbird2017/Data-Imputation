@@ -15,22 +15,11 @@ Nthreshold = 200     #for whole dataset.
 trainingData_icd = np.load('trainingData_icd.npy')
 trainingData_index = np.load('trainingData_index.npy')
 y_index = np.load('y_index.npy')
-print ("trainingData_icd.shape: ", trainingData_icd.shape)
 icd = trainingData_icd[:,0]
-# print "pass here "
-# print trainingData_icd.shape
-print trainingData_icd[:,0]
 
-
-# https://stackoverflow.com/questions/1987694/how-to-print-the-full-numpy-array
 np.set_printoptions(threshold=np.nan)
-# print icd
-# print y.shape
-# print type(y)
-# print y
 
 # ------- obtain the ICD-9 Code as string -------
-# http://tsaivgh.myweb.hinet.net/clinics/icd-9/icd_all.htm
 icd_codes = np.array(
 ['140.9','141.9','142.9','143.9','144.9',
 '145.9','147.9','148.9','150.9','151.9',
@@ -64,29 +53,16 @@ def Imputer2DArray(X):
     # print '1.1->', X.shape
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
     imp.fit(X)
-    # print '-----------4---------'
-    # print '1.2->', X.shape
     tempArray = imp.transform(X)
-    # print '1.3->', tempArray.shape
-
-
-
+ 
     return tempArray
-    # return X
-
-
-# print icd_codes.shape
-# print type(icd_codes)
-# print icd_codes[0]
-# print icd_codes[85]
-# print type(icd_codes[88])
 
 # ------- Cal the statistic info from icd -------
 unique, counts = np.unique(icd, return_counts=True)
 ranks = np.asarray((unique, counts)).T
 print type(ranks)
 print "ranks.shape: ", ranks.shape
-# print ranks
+
 print "----------------- icd_ranks ------------------"
 # icd_ranks =ranks[np.argsort(-ranks[:,1])] # decreasing order
 icd_ranks =ranks[np.argsort(ranks[:,1])]   #increasing order.
@@ -95,12 +71,7 @@ print icd_ranks.shape
 
 
 print "----------------- Get the row with N >= Nthreshold ------------------"
-# print ranks[0,:]
-# print type(ranks[0,0])
-# print type(ranks[0,1])
 icdsEngouthPoints = ranks[np.where(ranks[:,1] >= Nthreshold)]
-# print icdsEngouthPoints
-# print "icdsEngouthPoints.shape: ", icdsEngouthPoints.shape[0]
 print "# of disease > Nthreshold: ", icdsEngouthPoints.shape[0]
 
 
@@ -108,28 +79,8 @@ print "# of disease > Nthreshold: ", icdsEngouthPoints.shape[0]
 print "----------------- Get the icd for cancers (N >= Nthreshold) ------------------"
 
 icdCancers = icdsEngouthPoints[np.isin(icdsEngouthPoints[:,0], icd_codes)]    #for whole dataset.
-# icdCancers = icdsEngouthPoints  #for debugging.
-# icdCancers = icdsEngouthPoints[icdsEngouthPoints[:,0] in icd_codes]
-
-# print "icdCancers.shape: ", icdCancers.shape[0]
-print "# of cancer > Nthreshold: ", icdCancers.shape[0]
-print 'The icd code for cancer above:'
-# print icdCancers
 
 
-
-# # ------ draw the # of cancers in Fig_1 ------
-# data = icdCancers[:,1]
-# # np.random.shuffle(data)
-# print data.shape
-#
-# for i in data:
-#     print i
-
-
-
-
-print "----------------- Imputer as following code ------------------"
 sameNumOfTrainingData = True
 X = np.array([])
 Y = np.array([])
@@ -167,7 +118,6 @@ if sameNumOfTrainingData:
     print rawXY.shape
     print type(rawXY[0, 1])
 
-    print "----------------------------------------------------------------"
     # NumofEachCancer = 85
     NumofEachCancer = Nthreshold
 
@@ -200,24 +150,12 @@ if sameNumOfTrainingData:
     Y = resultArray[:, 0]
 else:
     rawXYIndex = np.isin(trainingData_icd[:, 0], icdCancers[:, 0])
-    # print rawXYIndex
     rawXY = trainingData_icd[rawXYIndex]    #imputer need to deal with rawXY, which has the icd info.
-    # X = trainingData_icd[np.isin(trainingData_icd[:, 0], icdCancers[:, 0])][:, 1:trainingData_icd.shape[1]]
-    # Y = trainingData_index[np.isin(trainingData_icd[:, 0], icdCancers[:, 0])][:, 0]
 
     print rawXY.shape
     X = imputerMulti2DArray(rawXY, 0, 1)
     print X.shape
-
-    # X = rawXY[:, 1:trainingData_icd.shape[1]] #without imputer
-
     Y = trainingData_index[rawXYIndex][:, 0]
-    # print rawXY
-
-
-
-
-
 
 
 
@@ -227,34 +165,19 @@ X_without_nan = X.astype(np.float32)
 Y = Y.astype('int')     # Y = Y.astype(np.float32)
 
 
-# print Y[0], Y[1], Y[12]
-
-# X = Imputer2DArray(X)
-
 # #------------------- save to training_X.npy and training_Y.npy --------------------
 np.save('training_X_with_nan.npy', X)
 np.save('training_X_without_nan.npy', X_without_nan)
 np.save('training_Y.npy', Y)
-print '--------- *** ------------'
-# # Y = reIndex(Y)
-
-# # ------ feature importance -----------
-# pca = PCA(n_components = X.shape[1])
-# pca.fit(X)
-# print 'n_components=',  pca.explained_variance_ratio_
-#
-# for j in pca.explained_variance_ratio_:
-#     print j
 
 
-# # ----------- write training data into excel to check ---------------
-# # https://stackoverflow.com/questions/31909722/how-to-write-python-array-into-excel-spread-sheet
-#
-# import xlsxwriter
-# workbook = xlsxwriter.Workbook('X.xlsx')
-# worksheet = workbook.add_worksheet()
-#
-# row = 0
-# for col, data in enumerate(X.T):
-#     worksheet.write_column(row, col, data)
-# workbook.close()
+
+# ----------- write training data into excel to check ---------------
+import xlsxwriter
+workbook = xlsxwriter.Workbook('X.xlsx')
+worksheet = workbook.add_worksheet()
+
+row = 0
+for col, data in enumerate(X.T):
+     worksheet.write_column(row, col, data)
+ workbook.close()
