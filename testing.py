@@ -7,27 +7,12 @@ from missingData import impute_em
 from datetime import datetime as dt
 
 X = np.load('training_X_with_nan.npy')
-# Y = np.load('training_Y.npy')
-# X = X[0:100,:]
-print (X.shape)
-# print (X)
-print ("-------------- 1 -------------")
-
-# X = X[:,~np.all(np.isnan(X), axis=0)] # delete the colomns with all nan.
-# X = X[~np.all(np.isnan(X), axis=1),:] # delete the rows with all nan.
-# print (X.shape)
-print ("-------------- 2 -------------")
-
 
 X = pd.DataFrame(data=X[0:,0:],index=X[0:,0],columns=X[0,0:])
-print (X.shape)
-X = X.dropna(thresh=len(X) * 0.6, axis=1)   #len(X) return number of rows in X. drop the column if a specific ratio of  data is missing.
-print (X.shape)
-print ("-------------- 2.1 -------------")
 
+X = X.dropna(thresh=len(X) * 0.6, axis=1)   #len(X) return number of rows in X. drop the column if a specific ratio of  data is missing.
 
 X = X.to_numpy()
-# x = X[0:500, 0:6]
 print (X.shape)
 print ("-------------- 3 -------------")
 
