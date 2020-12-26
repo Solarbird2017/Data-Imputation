@@ -1,15 +1,8 @@
 import pandas as pd
-
-# import datetime as dt
+import datetime as dt
 from datetime import datetime as dt
-
 import numpy as np
 from functools import reduce
-
-# xudong: read the following 4 csv file.
-# icd = pd.read_excel('SampleData/testing/icd_testing.xlsx')    # icd.csv has 7176 X 5, the 1st row is title. typs is DataFrame.
-
-
 
 # generate truth values from mu and sigma.
 np.random.seed(1024)
@@ -20,23 +13,6 @@ X_truth = np.random.multivariate_normal(mu, Sigma, n)
 
 
 def simulate_nan(X, nan_rate):
-    '''(np.array, number) -> {str: np.array or number}
-
-    Preconditions:
-    1. np.isnan(X_complete).any() == False
-    2. 0 <= nan_rate <= 1
-
-    Return the dictionary with four keys where:
-    - Key 'X' stores a np.array where some of the entries in X
-      are replaced with np.nan based on nan_rate specified.
-    - Key 'C' stores a np.array where each entry is False if the
-      corresponding entry in the key 'X''s np.array is np.nan, and True
-      otherwise.
-    - Key 'nan_rate' stores nan_rate specified.
-    - Key 'nan_rate_actual' stores the actual proportion of np.nan
-      in the key 'X''s np.array.
-    '''
-
     # Create C matrix; entry is False if missing, and True if observed
     X_complete = X.copy()
     nr, nc = X_complete.shape
@@ -74,21 +50,6 @@ X = result['X'].copy()
 print (result['nan_rate_actual'])
 
 def impute_em(X, max_iter=3000, eps=1e-08):
-    '''(np.array, int, number) -> {str: np.array or int}
-
-    Precondition: max_iter >= 1 and eps > 0
-
-    Return the dictionary with five keys where:
-    - Key 'mu' stores the mean estimate of the imputed data.
-    - Key 'Sigma' stores the variance estimate of the imputed data.
-    - Key 'X_imputed' stores the imputed data that is mutated from X using
-      the EM algorithm.
-    - Key 'C' stores the np.array that specifies the original missing entries
-      of X.
-    - Key 'iteration' stores the number of iteration used to compute
-      'X_imputed' based on max_iter and eps specified.
-    '''
-
     nr, nc = X.shape
     C = np.isnan(X) == False
 
@@ -140,28 +101,5 @@ def impute_em(X, max_iter=3000, eps=1e-08):
     }
 
     return result
-
-
-
-
-if __name__ == "__main__":
-    start = dt.now()
-    result_imputed = impute_em(X)
-    end = dt.now()
-
-    print(result_imputed['mu'])  # estimated the mu, and the output: array([1.54038092, 1.77970878, 6.47510847])
-
-    print(mu)  # true mu.
-
-    print(result_imputed['Sigma'])  # estimated sigma.
-
-    print(Sigma)  # true sigma.
-
-    print(X[np.arange(0, 4),])
-
-    print(result_imputed['X_imputed'][np.arange(0, 9),])
-
-    print("Time Consumption: ")
-    print(end - start)
 
 
