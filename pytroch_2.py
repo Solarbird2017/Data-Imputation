@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -77,14 +76,6 @@ for epoch in range(1000):
 
 predict_out = net(test_X)
 _, predict_y = torch.max(predict_out, 1)
-
-print ('prediction accuracy', accuracy_score(test_y.data, predict_y.data))
-
-# print ('macro precision', precision_score(test_y.data, predict_y.data, average='macro'))
-# print ('micro precision', precision_score(test_y.data, predict_y.data, average='micro'))
-# print ('macro recall', recall_score(test_y.data, predict_y.data, average='macro'))
-# print ('micro recall', recall_score(test_y.data, predict_y.data, average='micro'))
-
 
 names = [
     # "1. Logistic Regression",
