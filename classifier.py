@@ -11,8 +11,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
-# from sklearn.lda import LDA
-# from sklearn.qda import QDA
 from collections import Counter
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score
@@ -29,41 +27,11 @@ Y = np.load('training_Y.npy')
 
 
 X = pd.DataFrame(data=X[0:,0:],index=X[0:,0],columns=X[0,0:])
-print (X.shape)
 X = X.dropna(thresh=len(X) * 0.8, axis=1)   #len(X) return number of rows in X. 0.6-> all feature.
-print (X.shape)
-print ("-------------- 2.1 -------------")
-
-
 X = X.to_numpy()
-# x = X[0:500, 0:6]
-print (X.shape)
-print ("-------------- 3 -------------")
-
-print ("X.shape: ", X.shape)
-# # Y = Y.astype('int')
-
-# print (X)
-# print (X_with_nan)
-
-
-## convert your array into a dataframe
-# df_X = pd.DataFrame (X)
-# df_X_with_nan = pd.DataFrame (X_with_nan)
-
-## save to xlsx file
-
-
-# df_X.to_excel('X.xlsx', index=False)
-# df_X_with_nan.to_excel('X_with_nan.xlsx', index=False)
-
-
-
 
 
 # -------------- Feature Selection ---------------
-# http://sklearn.lzjqsdd.com/modules/feature_selection.html
-
 def f_importances(coef, names):
     imp = coef
     imp,names = zip(*sorted(zip(imp,names)))
@@ -71,47 +39,9 @@ def f_importances(coef, names):
     plt.yticks(range(len(names)), names)
     plt.show()
 
-# -------------------- 3.3.2 -----------------------
+
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import GradientBoostingClassifier
-
-# # SelectFromModel(GradientBoostingClassifier()).fit_transform(X, Y)
-#
-# X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.1, random_state=1)
-#
-# clf = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=14, random_state=0)
-# clf.fit(X_train, y_train)
-# clf.score(X_test, y_test)
-
-# print '-------------------- 1.13.2 -----------------------'
-# from sklearn.datasets import load_iris
-# from sklearn.feature_selection import SelectKBest
-# from sklearn.feature_selection import chi2
-# X = SelectKBest(chi2, k=15).fit_transform(X, Y)
-
-
-# print '-------------------- 1.13.4.1 -----------------------'
-# from sklearn.svm import LinearSVC
-# from sklearn.datasets import load_iris
-# from sklearn.feature_selection import SelectFromModel
-# lsvc = LinearSVC(C=0.01, penalty="l1", dual=False).fit(X, Y)
-# # lsvc = SVC(gamma=0.27, penalty="l1", C=10).fit(X, Y)
-# model = SelectFromModel(lsvc, prefit=True)
-# X = model.transform(X)
-
-# print ('-------------------- 1.13.4.3 Tree-based feature selection -----------------------')
-# from sklearn.ensemble import ExtraTreesClassifier
-# from sklearn.datasets import load_iris
-# from sklearn.feature_selection import SelectFromModel
-# clf = ExtraTreesClassifier()
-# clf = clf.fit(X, Y)
-# # print clf.feature_importances_
-# model = SelectFromModel(clf, prefit=True)
-# X = model.transform(X)
-# print ("X.shape after feature selection: ", X.shape)
-
-
-
 
 print ('--------  Start training ---------')
 
@@ -214,34 +144,7 @@ end = dt.now()
 print ("Time Consumption: ", end - start)
 
 
-
-
-
-
-
-# from matplotlib import pyplot as plt
-# from sklearn import svm
-#
-# def f_importances(coef, names):
-#     imp = coef
-#     imp,names = zip(*sorted(zip(imp,names)))
-#     plt.barh(range(len(names)), imp, align='center')
-#     plt.yticks(range(len(names)), names)
-#     plt.show()
-#
-# features_names = ['input1', 'input2']
-
-# svm = svm.SVC(kernel='linear')
-# svm.fit(X_train, y_train)
-# print svm.coef_
-# # f_importances(svm.coef_, features_names)
-
-
-
-
-
-
-# #------------------ GMM Classifier ---------------------#
+# #------------------ GMM Cluster ---------------------#
 # X = StandardScaler().fit_transform(X)
 # X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=.2)
 #
