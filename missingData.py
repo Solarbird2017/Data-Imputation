@@ -45,7 +45,7 @@ def simulate_nan(X, nan_rate):
     return result
 
 
-result = simulate_nan(X_truth, nan_rate = .4)   # missing data ratio to the truth.
+result = simulate_nan(X_truth, nan_rate = .4)   # missing data ratio to the truth as nan_rate = .4.
 X = result['X'].copy()
 print (result['nan_rate_actual'])
 
