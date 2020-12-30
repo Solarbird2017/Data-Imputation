@@ -4,8 +4,6 @@ import random
 from sklearn.decomposition import PCA
 
 import matplotlib
-# Force matplotlib to not use any Xwindows backend.
-#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -50,7 +48,6 @@ def reIndex(oriArray):
 
 # ------- Imputer2DArray(X) is dealing with Nan data in X ---------
 def Imputer2DArray(X):
-    # print '1.1->', X.shape
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
     imp.fit(X)
     tempArray = imp.transform(X)
@@ -92,15 +89,10 @@ def imputerMulti2DArray(rawXY, icdColIndex, NumOficd):
     print "results.shape: ", results.shape
     for i in uniqueIndex:
         indices = np.where(rawXY[:, icdColIndex] == i)
-        # print indices
         tempSubArray = rawXY[indices]
-        # print '1->', tempSubArray.shape
         tempSubArray = tempSubArray[:, NumOficd:(tempSubArray.shape[1] + 1)]
-        # print '2->',tempSubArray.shape
         tempSubArray = tempSubArray.astype(np.float32)
-        # print '3->', tempSubArray.shape
         tempSubArray = Imputer2DArray(tempSubArray)
-        # print '4->', tempSubArray.shape
 
         try:
             results[indices] = tempSubArray
@@ -125,26 +117,17 @@ if sameNumOfTrainingData:
     resultArray = np.empty((0, rawXY.shape[1] + 1), dtype='string')  # generates an empty data point.
     i = 1
     for icdCode in icdCancers[:, 0]:
-        # print icdCode
         temp = rawXY[np.isin(rawXY[:, 0], icdCode)]
-        # print temp
         index = random.sample(range(0, temp.shape[0]), NumofEachCancer)
-        # print index
-        # print np.ones((NumofEachCancer, 1))*i
-
         tempWithIndex = np.append(np.ones((NumofEachCancer, 1)) * i, temp[index, :], axis=1)
-        # print '--------'
-        # print temp[index,:]
         resultArray = np.append(resultArray, tempWithIndex, axis=0)
         i += 1
-        # print "----------------"
 
     print "resultArray.shape: ", resultArray.shape
 
     # print resultArray   #imputer need to deal with resultArray, which has the icd info.
 
     print "----------------- Get the training data X and Y ------------------"
-    # X = resultArray[:, 2:resultArray.shape[1]]
     X = imputerMulti2DArray(resultArray, 1, 2)
     # print X.shape
     Y = resultArray[:, 0]
